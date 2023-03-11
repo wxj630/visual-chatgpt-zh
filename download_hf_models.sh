@@ -1,5 +1,5 @@
 # huggingface下载好的模型路径，可以修改到自己想要存放模型的路径
-YOUR_HF_DOWNLOAD_PATH=hf_models_path
+YOUR_HF_DOWNLOAD_PATH={your_hf_models_path}
 
 cd $YOUR_HF_DOWNLOAD_PATH
 nohup git clone https://huggingface.co/Salesforce/blip-image-captioning-base &
