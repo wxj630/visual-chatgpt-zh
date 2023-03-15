@@ -3,6 +3,7 @@ visual-chatgpt支持中文的版本
 
 
 官方论文: [<font size=5>Visual ChatGPT: Talking, Drawing and Editing with Visual Foundation Models</font>](https://arxiv.org/abs/2303.04671)
+
 官方仓库：[visual-chatgpt](https://github.com/microsoft/visual-chatgpt)
 
 个人技术解读与实现：
@@ -42,14 +43,29 @@ export OPENAI_API_KEY={Your_Private_Openai_Key}
 # 6、下载hf模型到指定目录（注意要修改sh文件里的{your_hf_models_path}为模型存放目录）
 bash download_hf_models.sh
 
-# 7、克隆ContrlNet的代码，建立软链接，并下载ControlNet需要的模型
-bash download_controlnet_models.sh
+# 7、启动系统,这个例子我们加载了ImageCaptioning和Text2Image两个模型，
+# 想要用哪个功能就可增加一些模型加载
+python visual_chatgpt_zh.py 
+--load ImageCaptioning_cuda:0,Text2Image_cuda:0 \
+--pretrained_model_dir {your_hf_models_dir} \
+```
 
-# 8、创建一个文件夹存放图片
-mkdir ./image
+根据官方建议，不同显卡可以指定不同“--load”参数：
+```
+# Advice for CPU Users
+python visual_chatgpt.py --load ImageCaptioning_cpu,Text2Image_cpu
 
-# 9、启动系统！（注意要修改sh文件里的{your_hf_models_path}为模型存放目录）
-sh run.sh
+# Advice for 1 Tesla T4 15GB  (Google Colab)                       
+python visual_chatgpt.py --load "ImageCaptioning_cuda:0,Text2Image_cuda:0"
+                                
+# Advice for 4 Tesla V100 32GB                            
+python visual_chatgpt.py --load "ImageCaptioning_cuda:0,ImageEditing_cuda:0,
+    Text2Image_cuda:1,Image2Canny_cpu,CannyText2Image_cuda:1,
+    Image2Depth_cpu,DepthText2Image_cuda:1,VisualQuestionAnswering_cuda:2,
+    InstructPix2Pix_cuda:2,Image2Scribble_cpu,ScribbleText2Image_cuda:2,
+    Image2Seg_cpu,SegText2Image_cuda:2,Image2Pose_cpu,PoseText2Image_cuda:2,
+    Image2Hed_cpu,HedText2Image_cuda:3,Image2Normal_cpu,
+    NormalText2Image_cuda:3,Image2Line_cpu,LineText2Image_cuda:3"
 ```
 
 
