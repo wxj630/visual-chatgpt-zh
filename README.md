@@ -39,6 +39,8 @@ pip install -r requirement.txt
 
 # 5、确认api key
 export OPENAI_API_KEY={Your_Private_Openai_Key}
+# windows系统用set命令而不是export
+set OPENAI_API_KEY={Your_Private_Openai_Key}
 
 # 6、下载hf模型到指定目录（注意要修改sh文件里的{your_hf_models_path}为模型存放目录）
 bash download_hf_models.sh
