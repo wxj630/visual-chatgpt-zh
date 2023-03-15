@@ -50,7 +50,7 @@ python visual_chatgpt_zh.py
 --pretrained_model_dir {your_hf_models_dir} \
 ```
 
-根据官方建议，不同显卡可以指定不同“--load”参数：
+根据官方建议，不同显卡可以指定不同“--load”参数，显存不够的就可以时间换空间，把不重要的模型加载到cpu上，虽然推理慢但是好歹能跑不是？（手动狗头）：
 ```
 # Advice for CPU Users
 python visual_chatgpt.py --load ImageCaptioning_cpu,Text2Image_cpu
