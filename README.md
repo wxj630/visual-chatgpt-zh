@@ -26,13 +26,14 @@ visual-chatgpt支持中文的版本
 
 ```
 # 1、下载代码
-git clone github.com/wxj630/visual-chatgpt-zh
+git clone https://github.com/wxj630/visual-chatgpt-zh
 
 # 2、进入项目目录
 cd visual-chatgpt-zh
 
-# 3、创建python环境
+# 3、创建python环境并激活环境
 conda create -n visgpt python=3.8
+conda activate visgpt 
 
 # 4、安装环境依赖
 pip install -r requirement.txt
