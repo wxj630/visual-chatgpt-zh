@@ -17,7 +17,7 @@ from transformers import AutoImageProcessor, UperNetForSemanticSegmentation
 from diffusers import StableDiffusionPipeline, StableDiffusionInpaintPipeline, StableDiffusionInstructPix2PixPipeline
 from diffusers import EulerAncestralDiscreteScheduler
 from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, UniPCMultistepScheduler
-from controlnet_aux import OpenposeDetector, MLSDdetector, HEDdetector
+from .controlnet_aux import OpenposeDetector, MLSDdetector, HEDdetector
 
 from langchain.agents.initialize import initialize_agent
 from langchain.agents.tools import Tool
@@ -43,33 +43,65 @@ def seed_everything(seed):
 
 # 对话历史截断
 def cut_dialogue_history(history_memory, keep_last_n_words=500):
+    """
+    对话历史截断函数
+
+    Args:
+        history_memory: str, 对话历史
+        keep_last_n_words: int, 保留的单词数
+
+    Returns:
+        str, 截断后的对话历史
+    """
     tokens = history_memory.split()
     n_tokens = len(tokens)
     print(f"hitory_memory:{history_memory}, n_tokens: {n_tokens}")
+    # If the number of tokens is less than the specified keep_last_n_words, return the original history_memory
     if n_tokens < keep_last_n_words:
         return history_memory
     else:
         paragraphs = history_memory.split('\n')
         last_n_tokens = n_tokens
+        # Loop until the last_n_tokens is less than the specified keep_last_n_words
         while last_n_tokens >= keep_last_n_words:
             last_n_tokens = last_n_tokens - len(paragraphs[0].split(' '))
+            # Remove the first paragraph from the list of paragraphs
             paragraphs = paragraphs[1:]
+        # Join the remaining paragraphs with newline characters and return the result
         return '\n' + '\n'.join(paragraphs)
 
-# 获取新图片
+# 获取新图片名称
 def get_new_image_name(org_img_name, func_name="update"):
+    """
+    获取新图片名称
+
+    Args:
+        org_img_name: str, 原始图片名称
+        func_name: str, 函数名称
+
+    Returns:
+        str, 新图片名称
+    """
+    # Split the original image name into head (path) and tail (filename)
     head_tail = os.path.split(org_img_name)
     head = head_tail[0]
     tail = head_tail[1]
+    # Split the filename into parts
     name_split = tail.split('.')[0].split('_')
+    # Generate a new UUID and take the first 4 characters
     this_new_uuid = str(uuid.uuid4())[0:4]
+    # If there's only one part in the filename
     if len(name_split) == 1:
         most_org_file_name = name_split[0]
         recent_prev_file_name = name_split[0]
+         # Create a new filename with the format: UUID_function_recent_previous_most_original.png
         new_file_name = '{}_{}_{}_{}.png'.format(this_new_uuid, func_name, recent_prev_file_name, most_org_file_name)
     else:
+        # If there are 4 parts in the filename
         assert len(name_split) == 4
         most_org_file_name = name_split[3]
         recent_prev_file_name = name_split[0]
+        # Create a new filename with the format: UUID_function_recent_previous_most_original.png
         new_file_name = '{}_{}_{}_{}.png'.format(this_new_uuid, func_name, recent_prev_file_name, most_org_file_name)
+    # Return the new image name with the original path
     return os.path.join(head, new_file_name)

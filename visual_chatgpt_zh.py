@@ -91,6 +91,7 @@ class ConversationBot:
             raise ValueError("You have to load ImageCaptioning as a basic function for VisualChatGPT")
 
         self.llm = OpenAI(temperature=0)
+        # self.llm = OpenAIChat(temperature=0,model_name='gpt-3.5-turbo')
         self.memory = ConversationBufferMemory(memory_key="chat_history", output_key='output')
 
         self.models = dict()
