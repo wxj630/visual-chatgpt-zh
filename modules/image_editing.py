@@ -1,4 +1,5 @@
 from modules.utils import *
+from modules.mask_former import MaskFormer
 
 class ImageEditing:
     def __init__(self, device, pretrained_model_dir):
